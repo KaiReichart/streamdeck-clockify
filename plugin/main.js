@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars, no-undef */
-const togglBaseUrl = 'https://api.track.toggl.com/api/v8'
+const togglBaseUrl = 'https://api.clockify.me/api/v1'
 
 let websocket = null
 let currentButtons = new Map()
@@ -76,32 +76,41 @@ function refreshButtons() {
   
   tokens.forEach(apiToken => {
     
-    //Get the current entry for this token
-    getCurrentEntry(apiToken).then(entryData => {
     
-      //Loop over all the buttons and update as appropriate
-      currentButtons.forEach((settings, context) => {
-        if (apiToken != settings.apiToken) //not one of "our" buttons
+    //Loop over all the buttons and update as appropriate
+    currentButtons.forEach((settings, context) => {
+      if (apiToken != settings.apiToken) //not one of "our" buttons
           return //We're in a forEach, this is effectively a 'continue'
-        
+
+      //Get the current entry for this token
+      getCurrentEntry(apiToken, settings.workspaceId).then(entryData => {
+        console.log("---")
+        console.log(entryData)
+        console.log(settings)
+        console.log("---")
         if (entryData //Does button match the active timer? 
-            && entryData.wid == settings.workspaceId 
-            && entryData.pid == settings.projectId 
+            && entryData.workspaceId == settings.workspaceId 
+            && entryData.projectId == settings.projectId 
             && entryData.description == settings.activity) {
-          setState(context, 0)
-          setTitle(context, `${formatElapsed(entryData.duration)}\n\n\n${settings.label}`)
+              setState(context, 0)
+            setTitle(context, `${formatElapsed(entryData.timeInterval.start)}\n\n\n${settings.label}`)
         } else { //if not, make sure it's 'off'
           setState(context, 1)
           setTitle(context, settings.label)
         }
+
+
       })
+      
     })
   })
 }
 
-function formatElapsed(elapsedFromToggl)
+function formatElapsed(startDateTime)
 {
-  const elapsed = Math.floor(Date.now()/1000) + elapsedFromToggl
+  const start = Date.parse(startDateTime)
+  const now = new Date()
+  const elapsed = Math.floor((now - start) / 1000);
   return formatSeconds(elapsed)
 }
 
@@ -123,62 +132,80 @@ function leadingZero(val)
 async function toggle(context, settings) {
   const { apiToken, activity, projectId, workspaceId, billableToggle } = settings
 
-  getCurrentEntry(apiToken).then(entryData => {
-    if (!entryData) {
-      //Not running? Start a new one
-      startEntry(apiToken, activity, workspaceId, projectId, billableToggle).then(v=>refreshButtons())
-    } else if (entryData.wid == workspaceId && entryData.pid == projectId && entryData.description == activity) {
-      //The one running is "this one" -- toggle to stop
-      stopEntry(apiToken, entryData.id).then(v=>refreshButtons())
-    } else {
-      //Just start the new one, old one will stop, it's toggl.
-      startEntry(apiToken, activity, workspaceId, projectId, billableToggle).then(v=>refreshButtons())
-    }
-  })
+  entryData = await getCurrentEntry(apiToken, workspaceId)
+  if (!entryData) {
+    //Not running? Start a new one
+    await startEntry(apiToken, activity, workspaceId, projectId, billableToggle)
+    refreshButtons()
+  } else if (entryData.workspaceId == workspaceId && entryData.projectId == projectId && entryData.description == activity) {
+    //The one running is "this one" -- toggle to stop
+    await stopTimer(apiToken, workspaceId)
+    refreshButtons()
+  } else {
+    //Just start the new one, old one will stop, it's toggl.
+    await startEntry(apiToken, activity, workspaceId, projectId, billableToggle)
+    refreshButtons()
+  }
 }
 
 // Toggl API Helpers
 
 function startEntry(apiToken = isRequired(), activity = 'Time Entry created by Toggl for Stream Deck', workspaceId = 0, projectId = 0, billableToggle = false) {
   return fetch(
-    `${togglBaseUrl}/time_entries/start`, {
+    `${togglBaseUrl}/workspaces/${workspaceId}/time-entries`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Basic ${btoa(`${apiToken}:api_token`)}`
+      "X-Api-Key": apiToken
     },
     body: JSON.stringify({
-      time_entry: {
-        description: activity,
-        wid: workspaceId,
-        pid: projectId,
-	billable: billableToggle,
-        created_with: 'Stream Deck'
-      }
+      "start": (new Date()).toISOString(),
+      "billable": billableToggle,
+      "description": activity,
+      "projectId": projectId
     })
   })
 }
 
-function stopEntry(apiToken = isRequired(), entryId = isRequired()) {
+async function stopTimer(apiToken = isRequired(), workspaceId = isRequired()) {
+  userId = await getUserId(apiToken)
   return fetch(
-    `${togglBaseUrl}/time_entries/${entryId}/stop`, {
-    method: 'PUT',
+    `${togglBaseUrl}/workspaces/${workspaceId}/user/${userId}/time-entries`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      "end": (new Date()).toISOString(),
+    }),
     headers: {
-      Authorization: `Basic ${btoa(`${apiToken}:api_token`)}`
+      'Content-Type': 'application/json',
+      "X-Api-Key": apiToken
     }
   })
 }
 
-async function getCurrentEntry(apiToken = isRequired()) {
+async function getUserId(apiToken = isRequired()) {
   const response = await fetch(
-    `${togglBaseUrl}/time_entries/current`, {
+    `${togglBaseUrl}/user`, {
     method: 'GET',
     headers: {
-      Authorization: `Basic ${btoa(`${apiToken}:api_token`)}`
+      "X-Api-Key": apiToken
+    }
+  })
+  const userData = await response.json()
+  userId = userData.id
+  return userId
+}
+
+async function getCurrentEntry(apiToken = isRequired(), workspaceId = isRequired()) {
+  const userId = await getUserId(apiToken)
+  const response = await fetch(
+    `${togglBaseUrl}/workspaces/${workspaceId}/user/${userId}/time-entries?in-progress=1`, {
+    method: 'GET',
+    headers: {
+      "X-Api-Key": apiToken
     }
   })
   const data = await response.json()
-  return data.data
+  return data[0]
 }
 
 // Set Button State (for Polling)

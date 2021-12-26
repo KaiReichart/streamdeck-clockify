@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>io.moeritz.streamdeck.toggl.pi</title>
+  <title>dev.reichart.streamdeck.clockify.pi</title>
   <link rel="stylesheet" href="sdpi.css">
   <script src="main_pi.js"></script>
   <style>
@@ -55,22 +55,21 @@
       <div class="sdpi-item-label">Billable</div>
       <select class="sdpi-item-value select" id="billable" onchange="sendSettings()">
         <option value="0" selected>No</option>
-        <option value="1">Yes (paid Toggl plans only)</option>
+        <option value="1">Yes</option>
       </select>
     </div>
     <div class="sdpi-item">
       <details class="message info">
         <summary class="sdpi-item-value">
-          <div class="sdpi-item-child"><a onclick="openPage('track.toggl.com/timer')">Open Toggl</a></div>
-          <div class="sdpi-item-child" style="margin-top: -6px"><a onclick="openPage('track.toggl.com/profile')">Get Toggl API Token</a></div>
-          <div class="sdpi-item-child" style="margin-top: -2px"><a onclick="openPage('discord.gg/YWy3UAy')">Discord</a></div>
-          <div class="sdpi-item-child" style="margin-top: -6px"><a onclick="openPage('github.com/tobimori/streamdeck-toggl')">GitHub</a></div>
+          <div class="sdpi-item-child"><a onclick="openPage('clockify.me/tracker')">Open Clockify</a></div>
+          <div class="sdpi-item-child" style="margin-top: -6px"><a onclick="openPage('clockify.me/user/settings')">Get Toggl API Token</a></div>
+          <div class="sdpi-item-child" style="margin-top: -6px"><a onclick="openPage('github.com/KaiReichart/streamdeck-clockify')">GitHub</a></div>
         </summary>
       </details>
     </div>
     <div class="sdpi-item">
       <details class="message">
-        <summary style="margin-top: -10px">A project by <a onclick="openPage('moeritz.io')">tobimori</a></summary>
+        <summary style="margin-top: -10px">A project by <a onclick="openPage('reichart.dev')">KaiReichart</a></summary>
       </details>
     </div>
   </div>

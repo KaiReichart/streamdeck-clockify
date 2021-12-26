@@ -2,7 +2,7 @@
     "Actions": [
       {
         "Icon": "resources/actionIcon", 
-        "Name": "Toggl", 
+        "Name": "Clockify", 
         "States": [
           {
             "Image": "resources/actionImageOn",
@@ -16,18 +16,18 @@
           }
         ], 
         "SupportedInMultiActions": true,
-        "Tooltip": "Hassle-free time tracking using the Elgato Stream Deck and Toggl", 
-        "UUID": "io.moeritz.streamdeck.toggl.toggle"
+        "Tooltip": "Hassle-free time tracking using the Elgato Stream Deck and Clockify", 
+        "UUID": "dev.reichart.streamdeck.clockify.toggle"
       }
     ], 
     "SDKVersion": 2,
-    "Author": "tobimori", 
+    "Author": "KaiReichart", 
     "CodePath": "plugin/main.html", 
-    "Description": "Hassle-free time tracking using the Elgato Stream Deck and Toggl.", 
-    "Name": "Toggl", 
+    "Description": "Hassle-free time tracking using the Elgato Stream Deck and Clockify.", 
+    "Name": "Clockify", 
     "Icon": "resources/pluginIcon", 
     "PropertyInspectorPath": "pi/main_pi.html",
-    "URL": "https://moeritz.io", 
+    "URL": "https://reichart.dev", 
     "Version": "1.4.1",
     "OS": [
       {

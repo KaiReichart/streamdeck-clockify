@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars, no-undef */
-const togglBaseUrl = 'https://api.track.toggl.com/api/v8'
+const togglBaseUrl = 'https://api.clockify.me/api/v1'
 
 let websocket = null
 let uuid = null
@@ -137,7 +137,7 @@ async function getProjects (apiToken, workspaceId) {
     `${togglBaseUrl}/workspaces/${workspaceId}/projects`, {
       method: 'GET',
       headers: {
-        Authorization: `Basic ${btoa(`${apiToken}:api_token`)}`
+        "X-Api-Key": apiToken
       }
     })
   const data = await response.json()
@@ -149,7 +149,7 @@ async function getWorkspaces (apiToken) {
     `${togglBaseUrl}/workspaces`, {
       method: 'GET',
       headers: {
-        Authorization: `Basic ${btoa(`${apiToken}:api_token`)}`
+        "X-Api-Key": apiToken
       }
     })
   const data = await response.json()
