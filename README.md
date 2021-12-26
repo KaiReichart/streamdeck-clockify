@@ -1,6 +1,6 @@
 <p align="center">
   <a href="#">
-    <img src="resources/readme/GitHubBanner.png" alt="Clockify + Elgato Stream Deck" />
+    <img src="resources/readme/GitHubBanner.jpg" alt="Clockify + Elgato Stream Deck" />
   </a>
 </p>
 
@@ -18,6 +18,8 @@ ___
 # Hassle-free time tracking using [Elgato Stream Deck](https://www.elgato.com/en/gaming/stream-deck) and [Clockify](https://clockify.me/)
 
 This is a fork of the awesome [Toggl integration by tobimori](https://github.com/tobimori/streamdeck-toggl), modified to work with clockify instead of toggl.
+
+Note: I am in no way affiliated with clockify nor is this plugin endorsed or linked to clockify in any way.
 
 ## ✏️ Setup
 
