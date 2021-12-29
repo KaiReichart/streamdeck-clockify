@@ -134,7 +134,7 @@ async function updateWorkspaces (apiToken) {
 
 async function getProjects (apiToken, workspaceId) {
   const response = await fetch(
-    `${togglBaseUrl}/workspaces/${workspaceId}/projects`, {
+    `${togglBaseUrl}/workspaces/${workspaceId}/projects?archived=0`, {
       method: 'GET',
       headers: {
         "X-Api-Key": apiToken
