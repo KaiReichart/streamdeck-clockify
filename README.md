@@ -23,7 +23,9 @@ Note: I am in no way affiliated with clockify nor is this plugin endorsed or lin
 
 ## ✏️ Setup
 
-Just search for the Action "Clockify" within the Stream Deck app and install it. There is a button called "Clockify" available in section "Custom".
+Download tle latest release from [here](https://github.com/KaiReichart/streamdeck-clockify/releases) and open the file with the stream deck application.
+
+There is now a button called "Clockify" available in section "Custom".
 
 ![PropertyInspector](resources/readme/PropertyInspector.png)
 
