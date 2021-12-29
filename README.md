@@ -23,7 +23,7 @@ Note: I am in no way affiliated with clockify nor is this plugin endorsed or lin
 
 ## ✏️ Setup
 
-Download tle latest release from [here](https://github.com/KaiReichart/streamdeck-clockify/releases) and open the file with the stream deck application.
+Download the latest release file (dev.reichart.streamdeck.clockify.streamDeckPlugin) from [here](https://github.com/KaiReichart/streamdeck-clockify/releases) and open the file with the stream deck application.
 
 There is now a button called "Clockify" available in section "Custom".
 
